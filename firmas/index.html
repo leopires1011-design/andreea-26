@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Libro de firmas - Andreea</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100dvh;background:#0a060e;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#d4c5d9;overflow-x:hidden}
+
+.atmosphere{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.atmosphere::before{content:'';position:absolute;top:-30%;right:10%;width:60%;height:55%;background:radial-gradient(ellipse,rgba(74,21,75,0.3) 0%,transparent 70%);filter:blur(50px)}
+.atmosphere::after{content:'';position:absolute;bottom:-25%;left:15%;width:55%;height:45%;background:radial-gradient(ellipse,rgba(232,160,191,0.1) 0%,transparent 70%);filter:blur(50px)}
+
+.container{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1.5rem;max-width:420px;margin:0 auto}
+
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:9999px;background:rgba(18,9,25,0.8);border:1px solid rgba(232,160,191,0.2);font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#e8a0bf;margin-bottom:2rem}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#e8a0bf;box-shadow:0 0 6px #e8a0bf}
+
+.icon-wrap{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#f3c2d6 0%,#e8a0bf 50%,#c57b9d 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;box-shadow:0 0 40px rgba(232,160,191,0.3),0 0 80px rgba(232,160,191,0.1);animation:iconPulse 4s ease infinite}
+.icon-wrap svg{width:34px;height:34px;fill:none;stroke:#0a060e;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@keyframes iconPulse{0%,100%{box-shadow:0 0 40px rgba(232,160,191,0.3)}50%{box-shadow:0 0 55px rgba(232,160,191,0.45)}}
+
+h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;letter-spacing:-0.01em;line-height:1.2;margin-bottom:0.5rem;text-align:center}
+h1 em{font-style:italic;color:#fbb1d1}
+.subtitle{font-size:14px;color:#9c8aab;text-align:center;margin-bottom:2.5rem;line-height:1.6}
+
+/* Glass card form */
+.glass-card{width:100%;background:rgba(18,9,25,0.70);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border-radius:16px;border:1px solid;border-image:linear-gradient(135deg,rgba(232,160,191,0.28),rgba(45,17,63,0.4)) 1;padding:1.5rem;margin-bottom:1.5rem;box-shadow:0 12px 32px -4px rgba(10,6,14,0.8),0 0 24px -2px rgba(45,17,63,0.35);position:relative;overflow:hidden}
+.glass-card::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(243,194,214,0.3),transparent)}
+
+.field{margin-bottom:1.2rem}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:11px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:#e8a0bf;margin-bottom:0.5rem}
+.field input,.field textarea{width:100%;padding:12px 16px;background:rgba(18,9,25,0.5);border:1px solid rgba(212,197,217,0.15);border-radius:12px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;line-height:1.6;outline:none;transition:border-color 0.3s,box-shadow 0.3s}
+.field input::placeholder,.field textarea::placeholder{color:#9c8aab}
+.field input:focus,.field textarea:focus{border-color:#e8a0bf;box-shadow:0 0 12px rgba(232,160,191,0.25)}
+.field textarea{min-height:120px;resize:vertical}
+
+.btn-primary{display:block;width:100%;text-align:center;padding:14px 24px;background:linear-gradient(135deg,#f3c2d6 0%,#e8a0bf 50%,#c57b9d 100%);color:#0a060e;border:none;border-radius:9999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 1px 1px rgba(255,255,255,0.6),0 0 24px rgba(232,160,191,0.4);transition:transform 0.2s,box-shadow 0.2s,opacity 0.2s}
+.btn-primary:active{transform:scale(0.97)}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+
+.footer{margin-top:1.5rem;font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#9c8aab;opacity:0.5}
+
+/* Success state */
+.ok{display:none;text-align:center;animation:fadeIn 1s ease}
+.ok-icon{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(232,160,191,0.2),rgba(232,160,191,0.05));border:1px solid rgba(232,160,191,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem}
+.ok-icon svg{width:36px;height:36px;fill:none;stroke:#e8a0bf;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ok h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:400;color:#fff;margin-bottom:0.8rem}
+.ok p{font-size:14px;color:#9c8aab;line-height:1.7}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.sparkle{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.sp{position:absolute;width:2px;height:2px;background:#e8a0bf;border-radius:50%;opacity:0;animation:sp 5s ease-in-out infinite}
+@keyframes sp{0%,100%{opacity:0;transform:scale(0)}40%,60%{opacity:0.5;transform:scale(1)}}
+</style>
+</head>
+<body>
+<div class="atmosphere"></div>
+<div class="sparkle" id="sparkle"></div>
+
+<div class="container">
+  <div id="formview">
+    <div style="text-align:center">
+      <div class="badge">libro de firmas</div>
+    </div>
+
+    <div class="icon-wrap">
+      <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    </div>
+
+    <h1>Deja tu mensaje para <em>Andreea</em></h1>
+    <p class="subtitle">Escribe algo bonito, gracioso<br>o lo que te salga del alma</p>
+
+    <div class="glass-card">
+      <form id="msgform" onsubmit="enviar(event)">
+        <div class="field">
+          <label>Tu nombre</label>
+          <input type="text" id="nombre" placeholder="Como te llamas" required autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Tu mensaje</label>
+          <textarea id="mensaje" placeholder="Escribe aqui tu mensaje para Andreea..." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary" id="btn">Enviar mensaje</button>
+      </form>
+    </div>
+
+    <p class="footer">con todo nuestro amor</p>
+  </div>
+
+  <div class="ok" id="okview">
+    <div class="ok-icon">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>Mensaje enviado</h2>
+    <p>Andreea lo va a leer<br>y le va a encantar.</p>
+  </div>
+</div>
+
+<script>
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe-dsk4qMyldMsvQDKF76F_ul5Vz12qaQe2XV_TysGv6epECg/viewform';
+const FIELD_NOMBRE = 'entry.316561073';
+const FIELD_MENSAJE = 'entry.449947526';
+
+async function enviar(e){
+  e.preventDefault();
+  const btn=document.getElementById('btn');
+  btn.disabled=true;
+  btn.textContent='ENVIANDO...';
+
+  const nombre=document.getElementById('nombre').value.trim();
+  const mensaje=document.getElementById('mensaje').value.trim();
+
+  try{
+    const url=GOOGLE_FORM_URL.replace('/viewform','/formResponse');
+    const body=new URLSearchParams();
+    body.append(FIELD_NOMBRE, nombre);
+    body.append(FIELD_MENSAJE, mensaje);
+    await fetch(url,{method:'POST',body:body,mode:'no-cors'});
+  }catch(err){}
+
+  document.getElementById('formview').style.display='none';
+  document.getElementById('okview').style.display='block';
+}
+
+// Sparkles
+const s=document.getElementById('sparkle');
+for(let i=0;i<20;i++){
+  const d=document.createElement('div');
+  d.className='sp';
+  d.style.left=Math.random()*100+'vw';
+  d.style.top=Math.random()*100+'vh';
+  d.style.animationDelay=Math.random()*8+'s';
+  d.style.animationDuration=(4+Math.random()*4)+'s';
+  d.style.width=d.style.height=(1.5+Math.random()*2)+'px';
+  s.appendChild(d);
+}
+</script>
+</body>
+</html>

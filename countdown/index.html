@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sorpresa</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);font-family:'Segoe UI',system-ui,sans-serif;color:#fff}
+.container{text-align:center;padding:2rem;max-width:90vw}
+h1{font-size:1.6rem;font-weight:300;margin-bottom:2rem;opacity:0.9}
+.countdown{display:flex;gap:1rem;justify-content:center;margin:2rem 0}
+.unit{background:rgba(255,255,255,0.1);border-radius:16px;padding:1.2rem 1rem;min-width:70px;backdrop-filter:blur(10px)}
+.unit .number{font-size:2.5rem;font-weight:700;color:#e8a0bf}
+.unit .label{font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;opacity:0.7;margin-top:4px}
+.message{font-size:1.1rem;opacity:0.8;margin-top:1.5rem;line-height:1.6}
+.hidden{display:none}
+.revealed{animation:fadeIn 2s ease forwards}
+.revealed h1{font-size:1.8rem;margin-bottom:1rem}
+.revealed .location-btn{display:inline-block;margin-top:2rem;padding:1rem 2.5rem;background:#e8a0bf;color:#0f0c29;text-decoration:none;border-radius:50px;font-size:1.1rem;font-weight:600;transition:transform 0.2s}
+.revealed .location-btn:active{transform:scale(0.95)}
+.emoji{font-size:4rem;margin-bottom:1rem}
+@keyframes fadeIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.pulse{animation:pulse 2s ease infinite}
+</style>
+</head>
+<body>
+<div class="container" id="waiting">
+  <div class="emoji">&#127881;</div>
+  <h1>Algo especial te espera...</h1>
+  <div class="countdown" id="countdown">
+    <div class="unit"><div class="number" id="hours">--</div><div class="label">horas</div></div>
+    <div class="unit"><div class="number" id="mins">--</div><div class="label">min</div></div>
+    <div class="unit"><div class="number" id="secs">--</div><div class="label">seg</div></div>
+  </div>
+  <div class="message">Ten paciencia... la sorpresa merece la espera.</div>
+</div>
+
+<div class="container hidden revealed" id="reveal">
+  <div class="emoji pulse">&#128205;</div>
+  <h1>Ha llegado el momento</h1>
+  <p style="font-size:1.2rem;opacity:0.9;line-height:1.8">
+    Nos vemos aqui.<br>Te estan esperando.
+  </p>
+  <!-- CAMBIAR ESTA URL POR LA UBICACION REAL DE GOOGLE MAPS -->
+  <a class="location-btn" id="maplink" href="UBICACION_GOOGLE_MAPS" target="_blank">
+    &#128205; Abrir ubicacion
+  </a>
+</div>
+
+<script>
+// Fecha y hora de revelacion: 9 de noviembre 2026 a las 17:00 (hora de Espana peninsular)
+const REVEAL = new Date('2026-11-09T17:00:00+01:00');
+
+function update(){
+  const now = new Date();
+  const diff = REVEAL - now;
+
+  if(diff <= 0){
+    document.getElementById('waiting').classList.add('hidden');
+    document.getElementById('reveal').classList.remove('hidden');
+    return;
+  }
+
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+
+  document.getElementById('hours').textContent = String(h).padStart(2,'0');
+  document.getElementById('mins').textContent = String(m).padStart(2,'0');
+  document.getElementById('secs').textContent = String(s).padStart(2,'0');
+
+  requestAnimationFrame(()=> setTimeout(update, 200));
+}
+update();
+</script>
+</body>
+</html>

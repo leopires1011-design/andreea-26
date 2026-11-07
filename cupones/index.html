@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tus cupones</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;background:linear-gradient(135deg,#1a1a2e,#16213e);font-family:'Segoe UI',system-ui,sans-serif;color:#fff;padding:2rem 1rem}
+h1{text-align:center;font-size:1.5rem;font-weight:300;margin-bottom:0.5rem}
+.sub{text-align:center;font-size:0.9rem;opacity:0.6;margin-bottom:2rem}
+.cupones{display:flex;flex-direction:column;gap:1.2rem;max-width:400px;margin:0 auto}
+.cupon{background:linear-gradient(135deg,rgba(232,160,191,0.15),rgba(232,160,191,0.05));border:1px solid rgba(232,160,191,0.3);border-radius:16px;padding:1.5rem;position:relative;overflow:hidden;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;user-select:none}
+.cupon:active{transform:scale(0.97)}
+.cupon.used{opacity:0.4;border-color:rgba(255,255,255,0.1)}
+.cupon.used::after{content:'CANJEADO';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:1.5rem;font-weight:700;color:#e8a0bf;letter-spacing:4px;opacity:0.5}
+.cupon .emoji{font-size:2rem;margin-bottom:0.5rem}
+.cupon .title{font-size:1.1rem;font-weight:600;margin-bottom:0.3rem}
+.cupon .desc{font-size:0.85rem;opacity:0.7;line-height:1.4}
+.cupon .corner{position:absolute;top:-20px;right:-20px;width:60px;height:60px;background:rgba(232,160,191,0.1);border-radius:50%}
+.footer{text-align:center;margin-top:2rem;font-size:0.8rem;opacity:0.4}
+</style>
+</head>
+<body>
+<h1>Cupones de experiencias</h1>
+<p class="sub">Toca un cupon para canjearlo</p>
+
+<div class="cupones">
+
+  <div class="cupon" onclick="canjear(this)">
+    <div class="corner"></div>
+    <div class="emoji">&#127860;</div>
+    <div class="title">Una cena donde tu elijas</div>
+    <div class="desc">El restaurante que quieras, sin mirar la carta de precios. Tu mandas.</div>
+  </div>
+
+  <div class="cupon" onclick="canjear(this)">
+    <div class="corner"></div>
+    <div class="emoji">&#128134;</div>
+    <div class="title">Dia de spa y relax</div>
+    <div class="desc">Un dia entero para desconectar, masajes, jacuzzi y mimos.</div>
+  </div>
+
+  <div class="cupon" onclick="canjear(this)">
+    <div class="corner"></div>
+    <div class="emoji">&#127916;</div>
+    <div class="title">Noche de peli y manta</div>
+    <div class="desc">Tu eliges la peli, yo preparo las palomitas, la manta y los snacks.</div>
+  </div>
+
+  <div class="cupon" onclick="canjear(this)">
+    <div class="corner"></div>
+    <div class="emoji">&#9992;&#65039;</div>
+    <div class="title">Escapada sorpresa</div>
+    <div class="desc">Un fin de semana a donde tu quieras. Solo dime cuando.</div>
+  </div>
+
+  <div class="cupon" onclick="canjear(this)">
+    <div class="corner"></div>
+    <div class="emoji">&#127912;</div>
+    <div class="title">Plan creativo juntos</div>
+    <div class="desc">Pintura, ceramica, cocina... algo nuevo que no hayamos hecho nunca.</div>
+  </div>
+
+  <div class="cupon" onclick="canjear(this)">
+    <div class="corner"></div>
+    <div class="emoji">&#128150;</div>
+    <div class="title">Un dia entero para ti</div>
+    <div class="desc">24 horas haciendo lo que tu quieras. Sin peros, sin excusas. Todo tuyo.</div>
+  </div>
+
+</div>
+
+<p class="footer">Sin fecha de caducidad. Con todo mi amor, Leo.</p>
+
+<script>
+function canjear(el){
+  if(el.classList.contains('used'))return;
+  if(confirm('Quieres canjear este cupon?')){
+    el.classList.add('used');
+    localStorage.setItem('cupon_'+el.querySelector('.title').textContent,'used');
+  }
+}
+// Restaurar estado
+document.querySelectorAll('.cupon').forEach(c=>{
+  const t=c.querySelector('.title').textContent;
+  if(localStorage.getItem('cupon_'+t)==='used')c.classList.add('used');
+});
+</script>
+</body>
+</html>
