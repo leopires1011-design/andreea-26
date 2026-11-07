@@ -6,55 +6,27 @@
 <title>Para ti</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a0a0a;font-family:Georgia,'Times New Roman',serif;overflow:hidden}
-.container{text-align:center;padding:2rem;max-width:90vw}
-.heart{font-size:3rem;opacity:0;animation:fadeUp 1.5s ease forwards 0.3s}
-.line{color:#fff;font-size:1.3rem;line-height:1.8;opacity:0;margin:0.8rem 0}
-.line:nth-child(2){animation:fadeUp 1.5s ease forwards 1s}
-.line:nth-child(3){animation:fadeUp 1.5s ease forwards 2.5s}
-.line:nth-child(4){animation:fadeUp 1.5s ease forwards 4s}
-.line:nth-child(5){animation:fadeUp 1.5s ease forwards 5.5s}
-.line:nth-child(6){animation:fadeUp 1.5s ease forwards 7s}
-.firma{color:#e8a0bf;font-size:1.1rem;font-style:italic;opacity:0;animation:fadeUp 1.5s ease forwards 8.5s;margin-top:2rem}
-.particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
-.particle{position:absolute;font-size:1.2rem;opacity:0;animation:float 6s ease-in-out infinite}
-.container{position:relative;z-index:1}
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(20px)}
+body{min-height:100dvh;display:flex;align-items:center;justify-content:center;background:#faf8f5;font-family:Georgia,'Times New Roman',serif}
+.container{text-align:center;padding:2.5rem 2rem;max-width:360px}
+.line{color:#2c2c2c;font-size:1.15rem;line-height:1.9;margin:0.6rem 0;opacity:0;animation:appear 1s ease forwards}
+.line:nth-child(1){animation-delay:0.5s}
+.line:nth-child(2){animation-delay:1.8s}
+.line:nth-child(3){animation-delay:3.2s}
+.line:nth-child(4){animation-delay:4.8s}
+.firma{color:#999;font-size:0.95rem;font-style:italic;opacity:0;animation:appear 1s ease forwards;animation-delay:6.2s;margin-top:2rem}
+@keyframes appear{
+  from{opacity:0;transform:translateY(8px)}
   to{opacity:1;transform:translateY(0)}
-}
-@keyframes float{
-  0%{opacity:0;transform:translateY(100vh) rotate(0deg)}
-  10%{opacity:0.6}
-  90%{opacity:0.6}
-  100%{opacity:0;transform:translateY(-20vh) rotate(360deg)}
 }
 </style>
 </head>
 <body>
-<div class="particles" id="particles"></div>
 <div class="container">
-  <div class="line heart">&#10084;</div>
   <div class="line">Buenos dias, mi vida.</div>
-  <div class="line">Hoy es un dia muy especial<br>y quiero que lo vivas como te mereces.</div>
-  <div class="line">Espero que cada momento de hoy<br>te arranque una sonrisa.</div>
-  <div class="line">Llego para la hora de comer,<br>y a partir de ahi... dejate sorprender.</div>
-  <div class="line">Te quiero muchisimo.</div>
+  <div class="line">Solo queria recordarte<br>lo especial que eres.</div>
+  <div class="line">Hoy va a ser un buen dia,<br>ya veras.</div>
+  <div class="line">Te quiero.</div>
   <div class="firma">- Leo</div>
 </div>
-<script>
-const p=document.getElementById('particles');
-const emojis=['&#10084;','&#10025;','&#9733;'];
-for(let i=0;i<15;i++){
-  const s=document.createElement('span');
-  s.className='particle';
-  s.innerHTML=emojis[i%3];
-  s.style.left=Math.random()*100+'%';
-  s.style.animationDelay=Math.random()*8+'s';
-  s.style.animationDuration=(4+Math.random()*4)+'s';
-  s.style.fontSize=(0.8+Math.random()*0.8)+'rem';
-  p.appendChild(s);
-}
-</script>
 </body>
 </html>
