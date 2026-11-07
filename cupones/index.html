@@ -39,7 +39,6 @@ h1 em{font-style:italic;color:#fbb1d1}
 .cupon .title{font-family:'Playfair Display',serif;font-size:16px;font-weight:400;color:#fff;margin-bottom:4px}
 .cupon .desc{font-size:12px;color:#9c8aab;line-height:1.5}
 
-/* Confirming state */
 .confirm-row{display:none;margin-top:0.8rem;gap:0.5rem}
 .cupon.confirming .confirm-row{display:flex}
 .btn-confirm{flex:1;padding:10px;border:none;border-radius:9999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:transform 0.15s}
@@ -47,10 +46,19 @@ h1 em{font-style:italic;color:#fbb1d1}
 .btn-yes{background:linear-gradient(135deg,#f3c2d6,#e8a0bf,#c57b9d);color:#0a060e;box-shadow:0 0 16px rgba(232,160,191,0.3)}
 .btn-no{background:rgba(45,17,63,0.3);color:#d4c5d9;border:1px solid rgba(212,197,217,0.15)}
 
+/* Share row after redeeming */
+.share-row{display:none;margin-top:0.8rem;text-align:center}
+.cupon.just-redeemed .share-row{display:block}
+.share-msg{font-size:11px;color:#9c8aab;margin-bottom:0.5rem}
+.btn-share{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:9999px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 16px rgba(37,211,102,0.3);transition:transform 0.15s}
+.btn-share:active{transform:scale(0.96)}
+.btn-share svg{width:16px;height:16px;fill:#fff}
+
 /* Redeemed state */
 .cupon.used{border-color:rgba(232,160,191,0.08)}
 .cupon.used .cupon-inner{opacity:0.25;filter:blur(1px)}
 .cupon.used .redeemed-overlay{display:flex}
+.cupon.used .share-row{display:none}
 .redeemed-overlay{display:none;position:absolute;top:0;left:0;right:0;bottom:0;align-items:center;justify-content:center;animation:fadeIn 0.6s ease}
 .redeemed-tag{display:flex;align-items:center;gap:6px;padding:6px 18px;border-radius:9999px;background:rgba(232,160,191,0.12);border:1px solid rgba(232,160,191,0.25);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#e8a0bf}
 .redeemed-tag svg{width:14px;height:14px;fill:none;stroke:#e8a0bf;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
@@ -58,7 +66,16 @@ h1 em{font-style:italic;color:#fbb1d1}
 .footer{text-align:center;margin-top:2rem;font-size:11px;color:#9c8aab;line-height:1.7;opacity:0.7}
 .footer strong{color:#e8a0bf;font-weight:500}
 
-@keyframes fadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+/* === LEO VIEW === */
+.leo-view{display:none;text-align:center;animation:fadeIn 1s ease}
+.leo-card{background:rgba(18,9,25,0.70);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border-radius:20px;border:1px solid rgba(232,160,191,0.25);padding:2rem 1.5rem;margin-top:2rem;box-shadow:0 12px 40px -4px rgba(10,6,14,0.8);position:relative;overflow:hidden}
+.leo-card::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(243,194,214,0.3),transparent)}
+.leo-card .leo-emoji{font-size:3rem;margin-bottom:1rem}
+.leo-card .leo-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;color:#fff;margin-bottom:0.5rem}
+.leo-card .leo-cupon-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:#fbb1d1;font-style:italic;margin-bottom:1.2rem}
+.leo-card .leo-instrucciones{font-size:14px;color:#d4c5d9;line-height:1.7;background:rgba(232,160,191,0.08);border-radius:12px;padding:1rem 1.2rem;border-left:3px solid #e8a0bf}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 .sparkle{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .sp{position:absolute;width:2px;height:2px;background:#e8a0bf;border-radius:50%;opacity:0;animation:sp 5s ease-in-out infinite}
@@ -69,7 +86,8 @@ h1 em{font-style:italic;color:#fbb1d1}
 <div class="atmosphere"></div>
 <div class="sparkle" id="sparkle"></div>
 
-<div class="wrapper">
+<!-- ANDREEA VIEW -->
+<div class="wrapper" id="andreaView">
   <div class="header">
     <div class="badge">experiencias</div>
     <div class="icon-wrap"><span>&#127873;</span></div>
@@ -79,7 +97,7 @@ h1 em{font-style:italic;color:#fbb1d1}
 
   <div class="cupones" id="cupones">
 
-    <div class="cupon" data-id="cena" onclick="tocar(this)">
+    <div class="cupon" data-id="cena" data-emoji="&#127860;" data-nombre="Una cena donde tu elijas" onclick="tocar(this)">
       <div class="cupon-inner">
         <div class="emoji">&#127860;</div>
         <div class="text">
@@ -89,12 +107,16 @@ h1 em{font-style:italic;color:#fbb1d1}
       </div>
       <div class="confirm-row">
         <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
-        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+        <button class="btn-confirm btn-no" onclick="cancelarConfirm(event,this)">Aun no</button>
+      </div>
+      <div class="share-row">
+        <p class="share-msg">Avisa a Leo para que vea lo que has elegido</p>
+        <button class="btn-share" onclick="compartir(event,this)"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Enviar a Leo</button>
       </div>
       <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
     </div>
 
-    <div class="cupon" data-id="spa" onclick="tocar(this)">
+    <div class="cupon" data-id="spa" data-emoji="&#128134;" data-nombre="Dia de spa y relax" onclick="tocar(this)">
       <div class="cupon-inner">
         <div class="emoji">&#128134;</div>
         <div class="text">
@@ -104,12 +126,16 @@ h1 em{font-style:italic;color:#fbb1d1}
       </div>
       <div class="confirm-row">
         <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
-        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+        <button class="btn-confirm btn-no" onclick="cancelarConfirm(event,this)">Aun no</button>
+      </div>
+      <div class="share-row">
+        <p class="share-msg">Avisa a Leo para que vea lo que has elegido</p>
+        <button class="btn-share" onclick="compartir(event,this)"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Enviar a Leo</button>
       </div>
       <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
     </div>
 
-    <div class="cupon" data-id="peli" onclick="tocar(this)">
+    <div class="cupon" data-id="peli" data-emoji="&#127916;" data-nombre="Noche de peli y manta" onclick="tocar(this)">
       <div class="cupon-inner">
         <div class="emoji">&#127916;</div>
         <div class="text">
@@ -119,12 +145,16 @@ h1 em{font-style:italic;color:#fbb1d1}
       </div>
       <div class="confirm-row">
         <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
-        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+        <button class="btn-confirm btn-no" onclick="cancelarConfirm(event,this)">Aun no</button>
+      </div>
+      <div class="share-row">
+        <p class="share-msg">Avisa a Leo para que vea lo que has elegido</p>
+        <button class="btn-share" onclick="compartir(event,this)"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Enviar a Leo</button>
       </div>
       <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
     </div>
 
-    <div class="cupon" data-id="escapada" onclick="tocar(this)">
+    <div class="cupon" data-id="escapada" data-emoji="&#9992;&#65039;" data-nombre="Escapada sorpresa" onclick="tocar(this)">
       <div class="cupon-inner">
         <div class="emoji">&#9992;&#65039;</div>
         <div class="text">
@@ -134,12 +164,16 @@ h1 em{font-style:italic;color:#fbb1d1}
       </div>
       <div class="confirm-row">
         <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
-        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+        <button class="btn-confirm btn-no" onclick="cancelarConfirm(event,this)">Aun no</button>
+      </div>
+      <div class="share-row">
+        <p class="share-msg">Avisa a Leo para que vea lo que has elegido</p>
+        <button class="btn-share" onclick="compartir(event,this)"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Enviar a Leo</button>
       </div>
       <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
     </div>
 
-    <div class="cupon" data-id="creativo" onclick="tocar(this)">
+    <div class="cupon" data-id="creativo" data-emoji="&#127912;" data-nombre="Plan creativo juntos" onclick="tocar(this)">
       <div class="cupon-inner">
         <div class="emoji">&#127912;</div>
         <div class="text">
@@ -149,12 +183,16 @@ h1 em{font-style:italic;color:#fbb1d1}
       </div>
       <div class="confirm-row">
         <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
-        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+        <button class="btn-confirm btn-no" onclick="cancelarConfirm(event,this)">Aun no</button>
+      </div>
+      <div class="share-row">
+        <p class="share-msg">Avisa a Leo para que vea lo que has elegido</p>
+        <button class="btn-share" onclick="compartir(event,this)"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Enviar a Leo</button>
       </div>
       <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
     </div>
 
-    <div class="cupon" data-id="tudia" onclick="tocar(this)">
+    <div class="cupon" data-id="tudia" data-emoji="&#128150;" data-nombre="Un dia entero para ti" onclick="tocar(this)">
       <div class="cupon-inner">
         <div class="emoji">&#128150;</div>
         <div class="text">
@@ -164,7 +202,11 @@ h1 em{font-style:italic;color:#fbb1d1}
       </div>
       <div class="confirm-row">
         <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
-        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+        <button class="btn-confirm btn-no" onclick="cancelarConfirm(event,this)">Aun no</button>
+      </div>
+      <div class="share-row">
+        <p class="share-msg">Avisa a Leo para que vea lo que has elegido</p>
+        <button class="btn-share" onclick="compartir(event,this)"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Enviar a Leo</button>
       </div>
       <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
     </div>
@@ -174,9 +216,49 @@ h1 em{font-style:italic;color:#fbb1d1}
   <p class="footer">Sin fecha de caducidad.<br>Con todo mi amor, <strong>Leo</strong>.</p>
 </div>
 
+<!-- LEO VIEW (when opening shared link) -->
+<div class="wrapper leo-view" id="leoView">
+  <div class="header">
+    <div class="badge">alerta de cupon</div>
+    <div class="icon-wrap"><span>&#127881;</span></div>
+    <h1>Andreea ha <em>canjeado</em> un cupon</h1>
+  </div>
+
+  <div class="leo-card">
+    <div class="leo-emoji" id="leoEmoji"></div>
+    <div class="leo-title" id="leoCuponNombre"></div>
+    <div class="leo-instrucciones" id="leoInstrucciones"></div>
+  </div>
+
+  <p class="footer" style="margin-top:2rem">Ahora te toca cumplir.<br>Con todo su amor, <strong>Andreea</strong>.</p>
+</div>
+
 <script>
+var BASE_URL = 'https://leopires1011-design.github.io/andreea-26/cupones/';
+
+var CUPONES = {
+  cena:     { emoji: '🍼', nombre: 'Una cena donde tu elijas', instrucciones: 'Reserva mesa en el restaurante que ella elija. Sin mirar precios. Tu solo disfruta de la velada.' },
+  spa:      { emoji: '💆', nombre: 'Dia de spa y relax', instrucciones: 'Busca un buen spa y reserva un dia completo. Masajes, jacuzzi, todo el pack. Ella se lo merece.' },
+  peli:     { emoji: '🎬', nombre: 'Noche de peli y manta', instrucciones: 'Prepara palomitas, manta, snacks y cero movil. Ella elige la peli. Tu solo abrazala.' },
+  escapada: { emoji: '✈️', nombre: 'Escapada sorpresa', instrucciones: 'Fin de semana fuera. Ella elige el destino, tu te encargas de la logistica. A disfrutar.' },
+  creativo: { emoji: '🎨', nombre: 'Plan creativo juntos', instrucciones: 'Pintura, ceramica, cocina, lo que ella quiera. Algo nuevo para los dos. Busca opciones y proponle.' },
+  tudia:    { emoji: '💖', nombre: 'Un dia entero para ti', instrucciones: 'Hoy mandas tu 0%. Ella decide absolutamente todo durante 24 horas. Sin peros, sin quejas. Todo suyo.' }
+};
+
+var params = new URLSearchParams(window.location.search);
+var cuponParam = params.get('c');
+
+if(cuponParam && CUPONES[cuponParam]){
+  document.getElementById('andreaView').style.display = 'none';
+  document.getElementById('leoView').style.display = 'block';
+  var info = CUPONES[cuponParam];
+  document.getElementById('leoEmoji').textContent = info.emoji;
+  document.getElementById('leoCuponNombre').textContent = info.nombre;
+  document.getElementById('leoInstrucciones').textContent = info.instrucciones;
+}
+
 function tocar(el){
-  if(el.classList.contains('used') || el.classList.contains('confirming')) return;
+  if(el.classList.contains('used') || el.classList.contains('confirming') || el.classList.contains('just-redeemed')) return;
   document.querySelectorAll('.cupon.confirming').forEach(function(c){ c.classList.remove('confirming'); });
   el.classList.add('confirming');
 }
@@ -185,13 +267,35 @@ function canjear(e, btn){
   e.stopPropagation();
   var cupon = btn.closest('.cupon');
   cupon.classList.remove('confirming');
-  cupon.classList.add('used');
+  cupon.classList.add('just-redeemed');
   try{ localStorage.setItem('cupon_'+cupon.dataset.id, 'used'); }catch(err){}
 }
 
-function cancelar(e, btn){
+function cancelarConfirm(e, btn){
   e.stopPropagation();
   btn.closest('.cupon').classList.remove('confirming');
+}
+
+function compartir(e, btn){
+  e.stopPropagation();
+  var cupon = btn.closest('.cupon');
+  var id = cupon.dataset.id;
+  var nombre = cupon.dataset.nombre;
+  var url = BASE_URL + '?c=' + id;
+  var texto = 'He canjeado mi cupon: ' + nombre + ' 🎁✨\n\nAbre el link para ver que te toca hacer:\n' + url;
+
+  if(navigator.share){
+    navigator.share({ text: texto }).then(function(){
+      cupon.classList.remove('just-redeemed');
+      cupon.classList.add('used');
+    }).catch(function(){});
+  } else {
+    window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+    setTimeout(function(){
+      cupon.classList.remove('just-redeemed');
+      cupon.classList.add('used');
+    }, 1000);
+  }
 }
 
 document.querySelectorAll('.cupon').forEach(function(c){
