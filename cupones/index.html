@@ -4,88 +4,213 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tus cupones</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{min-height:100vh;background:linear-gradient(135deg,#1a1a2e,#16213e);font-family:'Segoe UI',system-ui,sans-serif;color:#fff;padding:2rem 1rem}
-h1{text-align:center;font-size:1.5rem;font-weight:300;margin-bottom:0.5rem}
-.sub{text-align:center;font-size:0.9rem;opacity:0.6;margin-bottom:2rem}
-.cupones{display:flex;flex-direction:column;gap:1.2rem;max-width:400px;margin:0 auto}
-.cupon{background:linear-gradient(135deg,rgba(232,160,191,0.15),rgba(232,160,191,0.05));border:1px solid rgba(232,160,191,0.3);border-radius:16px;padding:1.5rem;position:relative;overflow:hidden;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;user-select:none}
-.cupon:active{transform:scale(0.97)}
-.cupon.used{opacity:0.4;border-color:rgba(255,255,255,0.1)}
-.cupon.used::after{content:'CANJEADO';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:1.5rem;font-weight:700;color:#e8a0bf;letter-spacing:4px;opacity:0.5}
-.cupon .emoji{font-size:2rem;margin-bottom:0.5rem}
-.cupon .title{font-size:1.1rem;font-weight:600;margin-bottom:0.3rem}
-.cupon .desc{font-size:0.85rem;opacity:0.7;line-height:1.4}
-.cupon .corner{position:absolute;top:-20px;right:-20px;width:60px;height:60px;background:rgba(232,160,191,0.1);border-radius:50%}
-.footer{text-align:center;margin-top:2rem;font-size:0.8rem;opacity:0.4}
+body{min-height:100dvh;background:#0a060e;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#d4c5d9;overflow-x:hidden}
+
+.atmosphere{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.atmosphere::before{content:'';position:absolute;top:-30%;right:10%;width:60%;height:55%;background:radial-gradient(ellipse,rgba(74,21,75,0.3) 0%,transparent 70%);filter:blur(50px)}
+.atmosphere::after{content:'';position:absolute;bottom:-25%;left:15%;width:55%;height:45%;background:radial-gradient(ellipse,rgba(232,160,191,0.1) 0%,transparent 70%);filter:blur(50px)}
+
+.wrapper{position:relative;z-index:1;padding:2.5rem 1.5rem 3rem;max-width:420px;margin:0 auto}
+
+.header{text-align:center;margin-bottom:2rem}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:9999px;background:rgba(18,9,25,0.8);border:1px solid rgba(232,160,191,0.2);font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#e8a0bf;margin-bottom:1.5rem}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#e8a0bf;box-shadow:0 0 6px #e8a0bf}
+
+.icon-wrap{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#f3c2d6 0%,#e8a0bf 50%,#c57b9d 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;box-shadow:0 0 40px rgba(232,160,191,0.3),0 0 80px rgba(232,160,191,0.1);animation:iconPulse 4s ease infinite}
+.icon-wrap span{font-size:32px;line-height:1}
+@keyframes iconPulse{0%,100%{box-shadow:0 0 40px rgba(232,160,191,0.3)}50%{box-shadow:0 0 55px rgba(232,160,191,0.45)}}
+
+h1{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:#fff;letter-spacing:-0.01em;line-height:1.2;margin-bottom:0.4rem}
+h1 em{font-style:italic;color:#fbb1d1}
+.subtitle{font-size:14px;color:#9c8aab;line-height:1.6}
+
+.cupones{display:flex;flex-direction:column;gap:0.75rem;margin-top:2rem}
+
+.cupon{background:rgba(18,9,25,0.70);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border-radius:16px;border:1px solid rgba(232,160,191,0.18);padding:1.2rem 1rem;position:relative;overflow:hidden;cursor:pointer;transition:transform 0.2s,border-color 0.3s;user-select:none;box-shadow:0 8px 24px -4px rgba(10,6,14,0.6)}
+.cupon::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(243,194,214,0.2),transparent)}
+.cupon:active:not(.used):not(.confirming){transform:scale(0.98)}
+
+.cupon-inner{display:flex;align-items:flex-start;gap:1rem}
+.cupon .emoji{font-size:2rem;line-height:1;flex-shrink:0;margin-top:2px}
+.cupon .text{flex:1;min-width:0}
+.cupon .title{font-family:'Playfair Display',serif;font-size:16px;font-weight:400;color:#fff;margin-bottom:4px}
+.cupon .desc{font-size:12px;color:#9c8aab;line-height:1.5}
+
+/* Confirming state */
+.confirm-row{display:none;margin-top:0.8rem;gap:0.5rem}
+.cupon.confirming .confirm-row{display:flex}
+.btn-confirm{flex:1;padding:10px;border:none;border-radius:9999px;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:transform 0.15s}
+.btn-confirm:active{transform:scale(0.96)}
+.btn-yes{background:linear-gradient(135deg,#f3c2d6,#e8a0bf,#c57b9d);color:#0a060e;box-shadow:0 0 16px rgba(232,160,191,0.3)}
+.btn-no{background:rgba(45,17,63,0.3);color:#d4c5d9;border:1px solid rgba(212,197,217,0.15)}
+
+/* Redeemed state */
+.cupon.used{border-color:rgba(232,160,191,0.08)}
+.cupon.used .cupon-inner{opacity:0.25;filter:blur(1px)}
+.cupon.used .redeemed-overlay{display:flex}
+.redeemed-overlay{display:none;position:absolute;top:0;left:0;right:0;bottom:0;align-items:center;justify-content:center;animation:fadeIn 0.6s ease}
+.redeemed-tag{display:flex;align-items:center;gap:6px;padding:6px 18px;border-radius:9999px;background:rgba(232,160,191,0.12);border:1px solid rgba(232,160,191,0.25);font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#e8a0bf}
+.redeemed-tag svg{width:14px;height:14px;fill:none;stroke:#e8a0bf;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+.footer{text-align:center;margin-top:2rem;font-size:11px;color:#9c8aab;line-height:1.7;opacity:0.7}
+.footer strong{color:#e8a0bf;font-weight:500}
+
+@keyframes fadeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+
+.sparkle{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.sp{position:absolute;width:2px;height:2px;background:#e8a0bf;border-radius:50%;opacity:0;animation:sp 5s ease-in-out infinite}
+@keyframes sp{0%,100%{opacity:0;transform:scale(0)}40%,60%{opacity:0.5;transform:scale(1)}}
 </style>
 </head>
 <body>
-<h1>Cupones de experiencias</h1>
-<p class="sub">Toca un cupon para canjearlo</p>
+<div class="atmosphere"></div>
+<div class="sparkle" id="sparkle"></div>
 
-<div class="cupones">
-
-  <div class="cupon" onclick="canjear(this)">
-    <div class="corner"></div>
-    <div class="emoji">&#127860;</div>
-    <div class="title">Una cena donde tu elijas</div>
-    <div class="desc">El restaurante que quieras, sin mirar la carta de precios. Tu mandas.</div>
+<div class="wrapper">
+  <div class="header">
+    <div class="badge">experiencias</div>
+    <div class="icon-wrap"><span>&#127873;</span></div>
+    <h1>Tus cupones de <em>experiencias</em></h1>
+    <p class="subtitle">Toca uno para canjearlo cuando quieras</p>
   </div>
 
-  <div class="cupon" onclick="canjear(this)">
-    <div class="corner"></div>
-    <div class="emoji">&#128134;</div>
-    <div class="title">Dia de spa y relax</div>
-    <div class="desc">Un dia entero para desconectar, masajes, jacuzzi y mimos.</div>
+  <div class="cupones" id="cupones">
+
+    <div class="cupon" data-id="cena" onclick="tocar(this)">
+      <div class="cupon-inner">
+        <div class="emoji">&#127860;</div>
+        <div class="text">
+          <div class="title">Una cena donde tu elijas</div>
+          <div class="desc">El restaurante que quieras, sin mirar la carta de precios. Tu mandas.</div>
+        </div>
+      </div>
+      <div class="confirm-row">
+        <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
+        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+      </div>
+      <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
+    </div>
+
+    <div class="cupon" data-id="spa" onclick="tocar(this)">
+      <div class="cupon-inner">
+        <div class="emoji">&#128134;</div>
+        <div class="text">
+          <div class="title">Dia de spa y relax</div>
+          <div class="desc">Un dia entero para desconectar, masajes, jacuzzi y mimos.</div>
+        </div>
+      </div>
+      <div class="confirm-row">
+        <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
+        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+      </div>
+      <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
+    </div>
+
+    <div class="cupon" data-id="peli" onclick="tocar(this)">
+      <div class="cupon-inner">
+        <div class="emoji">&#127916;</div>
+        <div class="text">
+          <div class="title">Noche de peli y manta</div>
+          <div class="desc">Tu eliges la peli, yo preparo las palomitas, la manta y los snacks.</div>
+        </div>
+      </div>
+      <div class="confirm-row">
+        <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
+        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+      </div>
+      <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
+    </div>
+
+    <div class="cupon" data-id="escapada" onclick="tocar(this)">
+      <div class="cupon-inner">
+        <div class="emoji">&#9992;&#65039;</div>
+        <div class="text">
+          <div class="title">Escapada sorpresa</div>
+          <div class="desc">Un fin de semana a donde tu quieras. Solo dime cuando.</div>
+        </div>
+      </div>
+      <div class="confirm-row">
+        <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
+        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+      </div>
+      <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
+    </div>
+
+    <div class="cupon" data-id="creativo" onclick="tocar(this)">
+      <div class="cupon-inner">
+        <div class="emoji">&#127912;</div>
+        <div class="text">
+          <div class="title">Plan creativo juntos</div>
+          <div class="desc">Pintura, ceramica, cocina... algo nuevo que no hayamos hecho nunca.</div>
+        </div>
+      </div>
+      <div class="confirm-row">
+        <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
+        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+      </div>
+      <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
+    </div>
+
+    <div class="cupon" data-id="tudia" onclick="tocar(this)">
+      <div class="cupon-inner">
+        <div class="emoji">&#128150;</div>
+        <div class="text">
+          <div class="title">Un dia entero para ti</div>
+          <div class="desc">24 horas haciendo lo que tu quieras. Sin peros, sin excusas. Todo tuyo.</div>
+        </div>
+      </div>
+      <div class="confirm-row">
+        <button class="btn-confirm btn-yes" onclick="canjear(event,this)">Canjear</button>
+        <button class="btn-confirm btn-no" onclick="cancelar(event,this)">No, aun no</button>
+      </div>
+      <div class="redeemed-overlay"><div class="redeemed-tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Canjeado</div></div>
+    </div>
+
   </div>
 
-  <div class="cupon" onclick="canjear(this)">
-    <div class="corner"></div>
-    <div class="emoji">&#127916;</div>
-    <div class="title">Noche de peli y manta</div>
-    <div class="desc">Tu eliges la peli, yo preparo las palomitas, la manta y los snacks.</div>
-  </div>
-
-  <div class="cupon" onclick="canjear(this)">
-    <div class="corner"></div>
-    <div class="emoji">&#9992;&#65039;</div>
-    <div class="title">Escapada sorpresa</div>
-    <div class="desc">Un fin de semana a donde tu quieras. Solo dime cuando.</div>
-  </div>
-
-  <div class="cupon" onclick="canjear(this)">
-    <div class="corner"></div>
-    <div class="emoji">&#127912;</div>
-    <div class="title">Plan creativo juntos</div>
-    <div class="desc">Pintura, ceramica, cocina... algo nuevo que no hayamos hecho nunca.</div>
-  </div>
-
-  <div class="cupon" onclick="canjear(this)">
-    <div class="corner"></div>
-    <div class="emoji">&#128150;</div>
-    <div class="title">Un dia entero para ti</div>
-    <div class="desc">24 horas haciendo lo que tu quieras. Sin peros, sin excusas. Todo tuyo.</div>
-  </div>
-
+  <p class="footer">Sin fecha de caducidad.<br>Con todo mi amor, <strong>Leo</strong>.</p>
 </div>
 
-<p class="footer">Sin fecha de caducidad. Con todo mi amor, Leo.</p>
-
 <script>
-function canjear(el){
-  if(el.classList.contains('used'))return;
-  if(confirm('Quieres canjear este cupon?')){
-    el.classList.add('used');
-    localStorage.setItem('cupon_'+el.querySelector('.title').textContent,'used');
-  }
+function tocar(el){
+  if(el.classList.contains('used') || el.classList.contains('confirming')) return;
+  document.querySelectorAll('.cupon.confirming').forEach(function(c){ c.classList.remove('confirming'); });
+  el.classList.add('confirming');
 }
-// Restaurar estado
-document.querySelectorAll('.cupon').forEach(c=>{
-  const t=c.querySelector('.title').textContent;
-  if(localStorage.getItem('cupon_'+t)==='used')c.classList.add('used');
+
+function canjear(e, btn){
+  e.stopPropagation();
+  var cupon = btn.closest('.cupon');
+  cupon.classList.remove('confirming');
+  cupon.classList.add('used');
+  try{ localStorage.setItem('cupon_'+cupon.dataset.id, 'used'); }catch(err){}
+}
+
+function cancelar(e, btn){
+  e.stopPropagation();
+  btn.closest('.cupon').classList.remove('confirming');
+}
+
+document.querySelectorAll('.cupon').forEach(function(c){
+  try{
+    if(localStorage.getItem('cupon_'+c.dataset.id)==='used') c.classList.add('used');
+  }catch(err){}
 });
+
+var sp = document.getElementById('sparkle');
+for(var i = 0; i < 20; i++){
+  var d = document.createElement('div');
+  d.className = 'sp';
+  d.style.left = Math.random()*100+'vw';
+  d.style.top = Math.random()*100+'vh';
+  d.style.animationDelay = Math.random()*8+'s';
+  d.style.animationDuration = (4+Math.random()*4)+'s';
+  d.style.width = d.style.height = (1.5+Math.random()*2)+'px';
+  sp.appendChild(d);
+}
 </script>
 </body>
 </html>
