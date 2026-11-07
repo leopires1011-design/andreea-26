@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Para Andrea</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100dvh;background:#0a060e;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#d4c5d9;overflow-x:hidden}
+
+.atmosphere{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.atmosphere::before{content:'';position:absolute;top:-30%;left:20%;width:70%;height:60%;background:radial-gradient(ellipse,rgba(74,21,75,0.35) 0%,transparent 70%);filter:blur(40px)}
+.atmosphere::after{content:'';position:absolute;bottom:-20%;right:10%;width:60%;height:50%;background:radial-gradient(ellipse,rgba(232,160,191,0.12) 0%,transparent 70%);filter:blur(60px)}
+
+.container{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1.5rem;max-width:420px;margin:0 auto}
+
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:9999px;background:rgba(18,9,25,0.8);border:1px solid rgba(232,160,191,0.2);font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#e8a0bf;margin-bottom:2rem}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#e8a0bf;box-shadow:0 0 6px #e8a0bf}
+
+.icon-wrap{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#f3c2d6 0%,#e8a0bf 50%,#c57b9d 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;box-shadow:0 0 40px rgba(232,160,191,0.3),0 0 80px rgba(232,160,191,0.1);animation:iconPulse 4s ease infinite}
+.icon-wrap svg{width:36px;height:36px;fill:none;stroke:#0a060e;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@keyframes iconPulse{0%,100%{box-shadow:0 0 40px rgba(232,160,191,0.3)}50%{box-shadow:0 0 55px rgba(232,160,191,0.45)}}
+
+h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#fff;letter-spacing:-0.01em;line-height:1.2;margin-bottom:0.5rem;text-align:center}
+h1 em{font-style:italic;color:#fbb1d1}
+.subtitle{font-size:14px;color:#9c8aab;text-align:center;margin-bottom:2rem;line-height:1.6}
+
+.video-card{
+  width:100%;
+  background:rgba(18,9,25,0.70);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  border-radius:20px;
+  border:1px solid rgba(232,160,191,0.18);
+  overflow:hidden;
+  box-shadow:0 12px 40px -4px rgba(10,6,14,0.8);
+  position:relative;
+}
+.video-card::before{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(243,194,214,0.25),transparent);
+  z-index:1;
+}
+.video-card .video-wrapper{
+  position:relative;width:100%;padding-top:56.25%;
+  background:#000;
+}
+.video-card .video-wrapper iframe{
+  position:absolute;top:0;left:0;width:100%;height:100%;border:none;
+}
+
+.dedication{
+  text-align:center;margin-top:2rem;
+  font-family:'Playfair Display',serif;
+  font-size:16px;font-style:italic;
+  color:#d4c5d9;line-height:1.7;
+}
+
+.footer{margin-top:2rem;font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#9c8aab;opacity:0.5}
+
+.sparkle{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.sp{position:absolute;width:2px;height:2px;background:#e8a0bf;border-radius:50%;opacity:0;animation:sp 5s ease-in-out infinite}
+@keyframes sp{0%,100%{opacity:0;transform:scale(0)}40%,60%{opacity:0.5;transform:scale(1)}}
+</style>
+</head>
+<body>
+<div class="atmosphere"></div>
+<div class="sparkle" id="sparkle"></div>
+
+<div class="container">
+  <div style="text-align:center">
+    <div class="badge">para ti</div>
+  </div>
+
+  <div class="icon-wrap">
+    <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" fill="#0a060e" stroke="#0a060e"/></svg>
+  </div>
+
+  <h1>De todos los que <em>te quieren</em></h1>
+  <p class="subtitle">Dale al play y disfruta</p>
+
+  <div class="video-card">
+    <div class="video-wrapper">
+      <!-- YOUTUBE_VIDEO_ID se reemplaza cuando Leo suba el video -->
+      <iframe src="https://www.youtube.com/embed/YOUTUBE_VIDEO_ID?rel=0&modestbranding=1" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <p class="dedication">Feliz cumpleanos, Andrea.<br>Te queremos.</p>
+
+  <p class="footer">con todo nuestro amor</p>
+</div>
+
+<script>
+var s = document.getElementById('sparkle');
+for(var i = 0; i < 20; i++){
+  var d = document.createElement('div');
+  d.className = 'sp';
+  d.style.left = Math.random()*100+'vw';
+  d.style.top = Math.random()*100+'vh';
+  d.style.animationDelay = Math.random()*8+'s';
+  d.style.animationDuration = (4+Math.random()*4)+'s';
+  d.style.width = d.style.height = (1.5+Math.random()*2)+'px';
+  s.appendChild(d);
+}
+</script>
+</body>
+</html>
