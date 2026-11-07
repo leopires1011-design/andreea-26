@@ -14,6 +14,13 @@ body{min-height:100dvh;display:flex;align-items:center;justify-content:center;ba
 .line:nth-child(3){animation-delay:3.2s}
 .line:nth-child(4){animation-delay:4.8s}
 .firma{color:#999;font-size:0.95rem;font-style:italic;opacity:0;animation:appear 1s ease forwards;animation-delay:6.2s;margin-top:2rem}
+.posdata{color:#b8860b;font-size:0.85rem;font-style:italic;opacity:0;animation:appear 1s ease forwards;animation-delay:7.5s;margin-top:1.8rem;line-height:1.7;letter-spacing:0.01em}
+.sorpresa .line{color:#2c2c2c}
+.sorpresa .line:nth-child(1){animation-delay:0.5s}
+.sorpresa .line:nth-child(2){animation-delay:2s}
+.sorpresa .line:nth-child(3){animation-delay:3.5s}
+.sorpresa .firma{animation-delay:5s}
+.emoji{font-style:normal;font-family:sans-serif}
 @keyframes appear{
   from{opacity:0;transform:translateY(8px)}
   to{opacity:1;transform:translateY(0)}
@@ -21,12 +28,28 @@ body{min-height:100dvh;display:flex;align-items:center;justify-content:center;ba
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="line">Buenos dias, mi vida.</div>
-  <div class="line">Solo queria recordarte<br>lo especial que eres.</div>
-  <div class="line">Hoy va a ser un buen dia,<br>ya veras.</div>
-  <div class="line">Te quiero.</div>
-  <div class="firma">- Leo</div>
-</div>
+<div class="container" id="contenido"></div>
+<script>
+var HORA_CAMBIO = new Date('2026-11-09T17:00:00+01:00');
+var ahora = new Date();
+var c = document.getElementById('contenido');
+
+if (ahora >= HORA_CAMBIO) {
+  c.className = 'container sorpresa';
+  c.innerHTML =
+    '<div class="line">Ey, has vuelto... <span class="emoji">&#128064;</span></div>' +
+    '<div class="line">Mira detras de la tele.<br>Hay algo esperandote.</div>' +
+    '<div class="line">Escanealo.</div>' +
+    '<div class="firma">- Leo</div>';
+} else {
+  c.innerHTML =
+    '<div class="line">Buenos dias, mi vida.</div>' +
+    '<div class="line">Solo queria recordarte<br>lo especial que eres.</div>' +
+    '<div class="line">Hoy va a ser un buen dia,<br>ya veras.</div>' +
+    '<div class="line">Te quiero.</div>' +
+    '<div class="firma">- Leo</div>' +
+    '<div class="posdata">P.D. A las 17:00 vuelve a escanearme...</div>';
+}
+</script>
 </body>
 </html>
